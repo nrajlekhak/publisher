@@ -1,15 +1,22 @@
-import React from "react";
-import Navigation from "./navigation";
-import "./index.scss";
-import ReactDOM from "react-dom";
-import { Provider } from "react-redux";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import store from './redux/store';
 
+import Navigation from './navigation';
 
+// Module Federation Imports
+import Layout from 'publisher/Layout';
+
+import './index.scss';
+
+// import Table from './components/Table';
 
 const App = () => (
   <Provider store={store}>
-    <Navigation />
+    <Layout>
+      <Navigation />
+    </Layout>
   </Provider>
 );
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(<App />, document.getElementById('app'));
