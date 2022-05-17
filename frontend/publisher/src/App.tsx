@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
-
+import * as dotenv from "dotenv";
+dotenv.config({ path: __dirname + "/.env" });
 import "./index.scss";
 
 const App = () => (
