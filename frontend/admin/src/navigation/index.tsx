@@ -1,8 +1,8 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import Dashboard from "../pages/Dashboard";
-import Login from "../pages/Login";
-import ProtectedRoute, { ProtectedRouteProps } from "./ProtectedRoute";
+import Dashboard from "@pages/Dashboard";
+import Login from "@pages/Login";
+import ProtectedRoute, { ProtectedRouteProps } from "@navigation/ProtectedRoute";
 
 const index = () => {
   const defaultProtectedRouteProps: Omit<ProtectedRouteProps, "outlet"> = {
