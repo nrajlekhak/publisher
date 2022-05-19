@@ -1,8 +1,6 @@
 import React from 'react';
 import Table from '@components/Table';
 
-const Dashboard = () => {
+export default function Article() {
   return <Table title='Articles'></Table>;
-};
-
-export default Dashboard;
+}

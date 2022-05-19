@@ -1,19 +1,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Article from './components/Article';
-import PageTitle from './components/PageTitle';
+import { BrowserRouter } from 'react-router-dom';
+import Navigation from './Navigation';
 
 import './index.scss';
 import Layout from './Layout';
 
 const App = () => (
   <Layout>
-    <PageTitle />
-    <>
-      {new Array(10).fill('').map(() => (
-        <Article />
-      ))}
-    </>
+    <Navigation />
   </Layout>
 );
-ReactDOM.render(<App />, document.getElementById('app'));
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('app')
+);

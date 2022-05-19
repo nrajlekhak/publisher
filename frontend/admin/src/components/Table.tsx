@@ -1,15 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface TableProps {
   title: string;
 }
 
 const Table = ({ title }: TableProps) => {
+  const navigate = useNavigate();
   return (
     <div className='py-20 w-full'>
       <div className='mx-auto container bg-white dark:bg-gray-800 shadow rounded'>
-        <div className='flex flex-col lg:flex-row p-4 lg:p-8 justify-between items-start lg:items-stretch w-full'>
-          <div className='w-full lg:w-2/3 flex flex-row items-end'>
+        <div className='flex flex-col lg:flex-row p-4 lg:p-8 justify-end lg:items-stretch mr-10 pr-5 '>
+          <div className='flex flex-row items-end '>
             <div className='flex items-right lg:border-l lg:border-r border-gray-300 dark:border-gray-200 py-3 lg:py-0 lg:px-6'>
               <p
                 className='text-base text-gray-600 dark:text-gray-400'
@@ -54,7 +56,10 @@ const Table = ({ title }: TableProps) => {
             </div>
 
             <div className='lg:ml-6 flex items-center'>
-              <div className='text-white ml-4 cursor-pointer focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray bg-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 w-8 h-8 rounded flex items-center justify-center'>
+              <div
+                className='text-white ml-4 cursor-pointer focus:outline-none border border-transparent focus:border-gray-800 focus:shadow-outline-gray bg-indigo-700 transition duration-150 ease-in-out hover:bg-indigo-600 w-8 h-8 rounded flex items-center justify-center'
+                onClick={() => navigate('/admin/articles/create')}
+              >
                 <svg
                   xmlns='http://www.w3.org/2000/svg'
                   className='icon icon-tabler icon-tabler-plus'
@@ -104,8 +109,11 @@ const Table = ({ title }: TableProps) => {
               </tr>
             </thead>
             <tbody>
-              {new Array(20).fill('').map(() => (
-                <tr className='h-24 border-gray-300 dark:border-gray-200 border-b'>
+              {new Array(20).fill('').map((_, index) => (
+                <tr
+                  className='h-24 border-gray-300 dark:border-gray-200 border-b'
+                  key={index}
+                >
                   <td className='pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4'></td>
 
                   <td className='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
@@ -154,7 +162,6 @@ const Table = ({ title }: TableProps) => {
                     <button className='text-gray-500 rounded cursor-pointer border border-transparent focus:outline-none'>
                       <svg
                         xmlns='http://www.w3.org/2000/svg'
-                        onclick='dropdownFunction(this)'
                         className='icon icon-tabler icon-tabler-dots-vertical dropbtn'
                         width={28}
                         height={28}

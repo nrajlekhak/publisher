@@ -36,7 +36,7 @@ function Footer() {
             <div className='w-11/12 xl:w-1/6 lg:w-1/6 sm:w-11/12 lg:mx-0 xl:mx-0 mb-6 lg:mb-0 xl:mb-0 mt-8 lg:mt-8 xl:mt-0 pt-3'>
               <div className='flex justify-start sm:justify-start xl:justify-end space-x-6 pr-2 xl:pr-0 lg:pr-0 md:pr-0 sm:pr-0'>
                 <div>
-                  <a href='javascript:void(0)'>
+                  <a href='#'>
                     <svg
                       aria-label='Twitter'
                       xmlns='http://www.w3.org/2000/svg'
@@ -55,7 +55,7 @@ function Footer() {
                   </a>
                 </div>
                 <div>
-                  <a href='javascript:void(0)'>
+                  <a href='#'>
                     <svg
                       aria-label='Instagram'
                       xmlns='http://www.w3.org/2000/svg'
@@ -76,7 +76,7 @@ function Footer() {
                   </a>
                 </div>
                 <div>
-                  <a href='javascript:void(0)'>
+                  <a href='#'>
                     <svg
                       aria-label='Dribble'
                       xmlns='http://www.w3.org/2000/svg'
@@ -99,7 +99,7 @@ function Footer() {
                   </a>
                 </div>
                 <div>
-                  <a href='javascript:void(0)'>
+                  <a href='#'>
                     <svg
                       aria-label='Github'
                       xmlns='http://www.w3.org/2000/svg'
