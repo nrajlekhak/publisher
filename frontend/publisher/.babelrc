@@ -12,9 +12,12 @@
         "root": ["./"],
         "alias": {
           "@redux": "./src/redux",
-          "@screens": "./src/screens",
+          "@pages": "./src/pages",
           "@navigation": "./src/navigation",
-          "@components": "./src/components"
+          "@components": "./src/components",
+          "@config": "./src/config",
+          "@constants": "./src/constants",
+          "@services": "./src/services"
         }
       }
     ]
