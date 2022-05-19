@@ -1,17 +1,17 @@
-import axios from "axios";
+import axios from 'axios';
 
 const API = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
 });
 // request header
 API.interceptors.request.use(
   async (config: any) => {
-    const token = await localStorage.getItem("token");
+    const token = await localStorage.getItem('token');
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
+      config.headers.Authorization = `Bearer ${token || 'sfsdfsdfsdf'}`;
     }
     return config;
   },
