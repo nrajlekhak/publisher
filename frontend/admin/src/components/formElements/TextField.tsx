@@ -6,6 +6,7 @@ interface Props {
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent) => void;
+  type: 'email' | 'text' | 'password';
 }
 
 export default function TextField({
@@ -13,14 +14,16 @@ export default function TextField({
   title,
   value,
   name,
+  type,
   onChange,
 }: Props) {
   return (
     <div>
-      <p className='text-base font-medium leading-none text-gray-800'>
+      <p className='text-base font-medium leading-none text-gray-800 capitalize'>
         {title}
       </p>
       <input
+        type={type || 'text'}
         className='w-full p-3 mt-4 border border-gray-300 rounded outline-none focus:bg-gray-50'
         name={name}
         value={value}

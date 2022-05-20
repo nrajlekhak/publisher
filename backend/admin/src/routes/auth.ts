@@ -11,7 +11,7 @@ authRouter.get('/github-callback', async (req: Request, res: Response) => {
     const response = await github(code)
     res.json(response)
   } catch (e) {
-    return res.send(e)
+    return res.status(422).json(e)
   }
 })
 

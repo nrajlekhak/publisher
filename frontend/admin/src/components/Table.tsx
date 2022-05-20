@@ -8,7 +8,7 @@ interface TableProps {
 const Table = ({ title }: TableProps) => {
   const navigate = useNavigate();
   return (
-    <div className='py-20 w-full'>
+    <div className='w-full'>
       <div className='mx-auto container bg-white dark:bg-gray-800 shadow rounded'>
         <div className='flex flex-col lg:flex-row p-4 lg:p-8 justify-end lg:items-stretch mr-10 pr-5 '>
           <div className='flex flex-row items-end '>

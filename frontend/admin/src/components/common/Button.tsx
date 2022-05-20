@@ -17,8 +17,9 @@ export function PrimaryButton({
 }: Props) {
   return (
     <button
-      className={`bg-indigo-700 rounded hover:bg-indigo-600 transform duration-300 ease-in-out text-sm font-medium px-6 py-4 text-white lg:max-w-[144px] w-full ${
-        classNames || ''
+      className={` ${
+        classNames ||
+        'bg-indigo-700 rounded hover:bg-indigo-600 transform duration-300 ease-in-out text-sm font-medium px-6 py-4 text-white lg:max-w-[144px] w-full'
       } `}
       onClick={() => onClick()}
       disabled={disabled ? true : false}

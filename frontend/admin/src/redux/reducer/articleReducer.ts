@@ -9,7 +9,7 @@ export default (state = initialState, action: any) => {
     case ActionTypes.Article.GET_ARTICLE: {
       return {
         ...state,
-        weatherData: action.payload,
+        articleData: action.payload,
       };
     }
 

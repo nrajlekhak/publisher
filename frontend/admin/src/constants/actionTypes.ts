@@ -4,3 +4,8 @@ export const Article = {
 };
 
 export const LOGOUT = 'LOGOUT';
+
+export const Auth = {
+  LOGIN: 'LOGIN',
+  LOGOUT: 'LOGOUT',
+};
