@@ -6,6 +6,10 @@ export const Article = {
 export const LOGOUT = 'LOGOUT';
 
 export const Auth = {
+  SAVE_LOGIN: 'SAVE_LOGIN',
   LOGIN: 'LOGIN',
+  OAUTH_LOGIN: 'OAUTH_LOGIN',
+  LOGIN_ERROR: 'LOGIN_ERROR',
   LOGOUT: 'LOGOUT',
+  LOADING: 'LOADING',
 };

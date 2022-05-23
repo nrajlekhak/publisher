@@ -1,20 +1,25 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import store from 'admin/store';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 interface Props {
   auth: {
-    isAuthenticated: boolean;
-    roles: string[];
+    isAuthenticated?: boolean;
+    roles?: string[];
   };
 }
 
-export default function HeaderUser({
-  auth: { isAuthenticated, roles },
-}: Props) {
-  const [profile, setProfile] = React.useState<boolean>(false);
+export default function HeaderUser({ auth }: Props) {
+  React.useEffect(() => {
+    if (!auth.isAuthenticated) {
+      navigate('/login');
+    }
+  }, [auth.isAuthenticated]);
 
-  return isAuthenticated ? (
+  const [profile, setProfile] = React.useState<boolean>(false);
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  return auth?.isAuthenticated ? (
     <div
       aria-haspopup='true'
       className='cursor-pointer w-full flex items-center justify-end relative'
@@ -45,7 +50,9 @@ export default function HeaderUser({
           </li>
           <li
             className='cursor-pointer text-gray-600 text-sm leading-3 tracking-normal mt-2 py-2 hover:text-indigo-700 flex items-center focus:text-indigo-700 focus:outline-none'
-            onClick={() => {store.dispatch({ type: 'LOGOUT' });}}
+            onClick={() => {
+              dispatch({ type: 'LOGOUT' });
+            }}
           >
             <svg
               xmlns='http://www.w3.org/2000/svg'

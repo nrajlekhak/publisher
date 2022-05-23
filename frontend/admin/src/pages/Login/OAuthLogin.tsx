@@ -1,9 +1,8 @@
 import React from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { API } from '@config/axios';
-import store from '@redux/store';
 
 import * as ActionTypes from '@constants/actionTypes';
+import { useSelector, useDispatch } from 'react-redux';
 
 export default function OAuthLogin() {
   const [isError, setIsError] = React.useState(false);
@@ -11,22 +10,20 @@ export default function OAuthLogin() {
 
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
+  const { isAuthenticated, loading } = useSelector(
+    (state: any) => state.reducer.auth
+  );
+  const dispatch = useDispatch();
 
   const getToken = async (code: string) => {
     try {
-      const res = await API.get(`/auth/github-callback?code=${code}`);
-
-      localStorage.setItem('token', res.data.token);
-      localStorage.setItem('isAuthenticated', 'true');
-
-      store.dispatch({
-        type: ActionTypes.Auth.LOGIN,
+      dispatch({
+        type: ActionTypes.Auth.OAUTH_LOGIN,
         payload: {
-          roles: res.data.roles || [],
-          isAuthenticated: true,
+          code: code,
+          service: 'github',
         },
       });
-      navigate('/admin/articles');
     } catch (e) {
       setIsError(true);
     }
@@ -36,8 +33,12 @@ export default function OAuthLogin() {
     getToken(code || '');
   }, [code]);
 
-  if (!code || isError) return <div>Error</div>;
+  React.useEffect(() => {
+    if (isAuthenticated) navigate('/admin/articles');
+  }, [isAuthenticated]);
 
-  console.log(searchParams.get('code'));
+  if (loading) return <div>Loading</div>;
+
+  if (!code || isError) return <div>Error</div>;
   return <div>OAuthLogin</div>;
 }

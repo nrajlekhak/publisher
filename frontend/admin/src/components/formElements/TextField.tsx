@@ -6,7 +6,7 @@ interface Props {
   name: string;
   value: string;
   onChange: (e: React.ChangeEvent) => void;
-  type: 'email' | 'text' | 'password';
+  type?: 'email' | 'text' | 'password';
 }
 
 export default function TextField({

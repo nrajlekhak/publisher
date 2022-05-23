@@ -1,9 +1,26 @@
+import React from 'react';
+import { Formik } from 'formik';
+
 import { PrimaryButton } from '@components/common/Button';
 import TextField from '@components/formElements/TextField';
 import LoginWithGithub from '@components/LoginWithGithub';
-import React from 'react';
+import * as ActionTypes from '@constants/actionTypes';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function MyApp() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isAuthenticated } = useSelector((state: any) => state.reducer.auth);
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/admin/articles');
+    }
+  }, [isAuthenticated]);
+
   return (
     <div className='h-full w-full px-4'>
       <div className='flex flex-col items-center justify-center'>
@@ -24,34 +41,54 @@ function MyApp() {
             </p>
             <hr className='w-full bg-gray-400  ' />
           </div>
-          <div>
-            <TextField
-              desc=''
-              name='email'
-              title='email'
-              value=''
-              type='email'
-              onChange={() => {}}
-            />
-          </div>
-          <div className='mt-6  w-full'>
-            <TextField
-              desc=''
-              name='password'
-              value=''
-              title='password'
-              type='password'
-              onChange={() => {}}
-            />
-          </div>
-          <div className='mt-8'>
-            <PrimaryButton
-              type='submit'
-              title='Login'
-              classNames='focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full'
-              onClick={() => {}}
-            ></PrimaryButton>
-          </div>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={(e) => {
+              dispatch({
+                type: ActionTypes.Auth.LOGIN,
+                payload: {
+                  email: e.email,
+                  password: e.password,
+                },
+              });
+            }}
+          >
+            {(props) => (
+              <form onSubmit={props.handleSubmit}>
+                <div>
+                  <TextField
+                    desc=''
+                    name='email'
+                    title='email'
+                    type='email'
+                    value={props.values.email}
+                    onChange={props.handleChange}
+                  />
+                </div>
+                <div className='mt-6  w-full'>
+                  <TextField
+                    desc=''
+                    name='password'
+                    title='password'
+                    type='password'
+                    value={props.values.password}
+                    onChange={props.handleChange}
+                  />
+                </div>
+                <div className='mt-8'>
+                  <PrimaryButton
+                    type='submit'
+                    title='Login'
+                    classNames='focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full'
+                    onClick={() => props.submitForm}
+                  ></PrimaryButton>
+                </div>
+              </form>
+            )}
+          </Formik>
         </div>
       </div>
     </div>

@@ -2,15 +2,15 @@ import React, { useContext } from 'react';
 import { ReactReduxContext } from 'react-redux';
 import { Link, NavLink } from 'react-router-dom';
 import HeaderUser from './HeaderUser';
+import { useSelector } from 'react-redux';
 
 const activeRouteClass =
   'text-indigo-700 border-b-2 border-indigo-700 h-full pt-6';
 
 export default function Nav(): JSX.Element {
   const [show, setShow] = React.useState<boolean>(false);
-  const { store } = useContext(ReactReduxContext);
-  const auth = store.getState().reducer.auth;
 
+  const auth = useSelector((state: any) => state.reducer.auth);
   return (
     <>
       <div
@@ -213,16 +213,18 @@ export default function Nav(): JSX.Element {
                   Dashboard
                 </NavLink>
               </li>
-              {auth.isAuthenticated && <li className='cursor-pointer h-full flex items-center text-sm text-gray-800 mx-10 tracking-normal'>
-                <NavLink
-                  className={({ isActive }: { isActive: boolean }) =>
-                    isActive ? activeRouteClass : ''
-                  }
-                  to='/admin/articles'
-                >
-                  Admin
-                </NavLink>
-              </li>}
+              {auth?.isAuthenticated && (
+                <li className='cursor-pointer h-full flex items-center text-sm text-gray-800 mx-10 tracking-normal'>
+                  <NavLink
+                    className={({ isActive }: { isActive: boolean }) =>
+                      isActive ? activeRouteClass : ''
+                    }
+                    to='/admin/articles'
+                  >
+                    Admin
+                  </NavLink>
+                </li>
+              )}
             </ul>
           </div>
           <div className='h-full xl:flex items-center justify-end hidden'>

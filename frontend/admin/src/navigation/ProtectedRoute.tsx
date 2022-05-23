@@ -1,9 +1,9 @@
-import React, { Children } from 'react';
+import React, { ReactElement } from 'react';
 import { Navigate, Outlet } from 'react-router-dom';
 
 export type ProtectedRouteProps = {
   authenticationPath: string;
-  children?: JSX.Element[];
+  children?: ReactElement;
 };
 
 const ProtectedRoute = ({
