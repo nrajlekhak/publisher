@@ -5,7 +5,7 @@ const Dotenv = require('dotenv-webpack');
 const deps = require('./package.json').dependencies;
 module.exports = {
   output: {
-    publicPath: 'http://localhost:3001/',
+    publicPath: 'http://localhost:3000/',
   },
 
   resolve: {
@@ -13,7 +13,7 @@ module.exports = {
   },
 
   devServer: {
-    port: 3001,
+    port: 3000,
     historyApiFallback: true,
   },
 
@@ -45,11 +45,10 @@ module.exports = {
       name: 'admin',
       filename: 'remoteEntry.js',
       remotes: {
-        publisher: 'publisher@http://localhost:3000/remoteEntry.js',
+        publisher: 'publisher@http://localhost:3001/remoteEntry.js',
       },
       exposes: {
-        './Articles': './src/pages/Article/Index.tsx',
-        './Articles/Create': './src/pages/Article/Create.tsx',
+        './store': './src/redux/store.ts'
       },
       shared: {
         ...deps,

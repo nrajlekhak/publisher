@@ -11,7 +11,7 @@ authRouter.get('/github-callback', async (req: Request, res: Response) => {
     const response = await github(code)
     res.json(response)
   } catch (e) {
-    return res.send(e)
+    return res.status(422).json(e)
   }
 })
 
@@ -29,10 +29,10 @@ authRouter.route('/login').post(async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body
     const { token, foundUser } = await login(email, password)
-    return res.json({ token, id: foundUser.id })
+    return res.json({ token, id: foundUser.id, roles: foundUser.roles })
   } catch (error) {
     console.error(error)
-    return res.send(error)
+    return res.status(500).json(error)
   }
 })
 

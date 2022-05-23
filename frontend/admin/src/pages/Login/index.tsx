@@ -1,60 +1,98 @@
-import React from "react";
+import React from 'react';
+import { Formik } from 'formik';
 
-const Login = () => {
+import { PrimaryButton } from '@components/common/Button';
+import TextField from '@components/formElements/TextField';
+import LoginWithGithub from '@components/LoginWithGithub';
+import * as ActionTypes from '@constants/actionTypes';
+
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+
+function MyApp() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const { isAuthenticated } = useSelector((state: any) => state.reducer.auth);
+
+  React.useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/admin/articles');
+    }
+  }, [isAuthenticated]);
+
   return (
-    <section className="h-screen">
-      <div className="px-6 h-full text-gray-800">
-        <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
-          <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
-            <img
-              src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
-              className="w-full"
-              alt="Sample image"
-            />
+    <div className='h-full w-full px-4'>
+      <div className='flex flex-col items-center justify-center'>
+        <div className='bg-white shadow rounded lg:w-1/3  md:w-1/2 w-full p-10'>
+          <p
+            tabIndex={0}
+            role='heading'
+            aria-label='Login to your account'
+            className='text-2xl text-center font-extrabold leading-6 text-gray-800 pb-5'
+          >
+            Login to your account
+          </p>
+          <LoginWithGithub />
+          <div className='w-full flex items-center justify-between py-5'>
+            <hr className='w-full bg-gray-400' />
+            <p className='text-base font-medium leading-4 px-2.5 text-gray-400'>
+              OR
+            </p>
+            <hr className='w-full bg-gray-400  ' />
           </div>
-          <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
-            <form>
-              <div className="flex flex-row items-center justify-center lg:justify-start">
-                <p className="text-lg mb-0 mr-4">Sign in</p>
-              </div>
-
-            
-
-              <div className="mb-6">
-                <input
-                  type="text"
-                  className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  id="exampleFormControlInput2"
-                  placeholder="Email address"
-                />
-              </div>
-
-              <div className="mb-6">
-                <input
-                  type="password"
-                  className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                  id="exampleFormControlInput2"
-                  placeholder="Password"
-                />
-              </div>
-
-              
-
-              <div className="text-center lg:text-left">
-                <button
-                  type="button"
-                  className="inline-block px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-                >
-                  Login
-                </button>
-             
-              </div>
-            </form>
-          </div>
+          <Formik
+            initialValues={{
+              email: '',
+              password: '',
+            }}
+            onSubmit={(e) => {
+              dispatch({
+                type: ActionTypes.Auth.LOGIN,
+                payload: {
+                  email: e.email,
+                  password: e.password,
+                },
+              });
+            }}
+          >
+            {(props) => (
+              <form onSubmit={props.handleSubmit}>
+                <div>
+                  <TextField
+                    desc=''
+                    name='email'
+                    title='email'
+                    type='email'
+                    value={props.values.email}
+                    onChange={props.handleChange}
+                  />
+                </div>
+                <div className='mt-6  w-full'>
+                  <TextField
+                    desc=''
+                    name='password'
+                    title='password'
+                    type='password'
+                    value={props.values.password}
+                    onChange={props.handleChange}
+                  />
+                </div>
+                <div className='mt-8'>
+                  <PrimaryButton
+                    type='submit'
+                    title='Login'
+                    classNames='focus:ring-2 focus:ring-offset-2 focus:ring-indigo-700 text-sm font-semibold leading-none text-white focus:outline-none bg-indigo-700 border rounded hover:bg-indigo-600 py-4 w-full'
+                    onClick={() => props.submitForm}
+                  ></PrimaryButton>
+                </div>
+              </form>
+            )}
+          </Formik>
         </div>
       </div>
-    </section>
+    </div>
   );
-};
+}
 
-export default Login;
+export default MyApp;

@@ -9,6 +9,7 @@ services:
       - 27017:27017
     volumes:
       - mongo_db:/data/db
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js
 
   admin_api:
     build: .
@@ -18,7 +19,7 @@ services:
       - .:/usr/src/app
     environment:
       PORT: 8000
-      MONGODB_URI: mongodb://mongo_db:27017/publishers
+      MONGODB_URI: mongodb://niraj:niraj@mongo_db:27017/publishers
     depends_on:
       - mongo_db
 

@@ -1,11 +1,13 @@
-import { Formik } from 'formik';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { PrimaryButton, SecondaryButton } from '../../components/common/Button';
-import TextAreaWysiwyg from '../../components/formElements/TextAreaWysiwyg';
-import TextField from '../../components/formElements/TextField';
-import * as ActionTypes from '../../constants/actionTypes';
-import store from '../../redux/store';
+
+import { Formik } from 'formik';
+
+import { PrimaryButton, SecondaryButton } from '@components/common/Button';
+import TextAreaWysiwyg from '@components/formElements/TextAreaWysiwyg';
+import TextField from '@components/formElements/TextField';
+import * as ActionTypes from '@constants/actionTypes';
+import store from '@redux/store';
 
 function Form(): JSX.Element {
   const navigate = useNavigate();
