@@ -29,6 +29,7 @@ const init = async ({}) => {
 
 function registerModels() {
   require('./models/Article')
+  require('./models/ArticleHistory')
 }
 
 export default { init }

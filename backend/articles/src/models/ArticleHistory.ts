@@ -1,7 +1,7 @@
 import mongoose, { Schema } from 'mongoose'
-import { Article } from '../@types/Article'
+import { ArticleHistory } from '../@types/Article'
 
-const ArticleSchema = new mongoose.Schema<Article>(
+const ArticleHistorySchema = new mongoose.Schema<ArticleHistory>(
   {
     title: {
       type: String,
@@ -11,7 +11,6 @@ const ArticleSchema = new mongoose.Schema<Article>(
       type: String,
       required: true,
       trim: true,
-      unique: true,
     },
     description: {
       type: String,
@@ -30,20 +29,28 @@ const ArticleSchema = new mongoose.Schema<Article>(
       default: null,
       type: Date,
     },
+    articleId: {
+      type: mongoose.Schema.Types.ObjectId,
+      required: true,
+      ref: 'Article',
+    },
+    updatedBy: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'User',
+    },
     edited: {
       type: Number,
-      default: 0,
     },
   },
   { timestamps: true }
 )
 
-ArticleSchema.set('toJSON', {
+ArticleHistorySchema.set('toJSON', {
   transform: function (_, ret) {
     delete ret._v
   },
 })
 
-const Article = mongoose.model<Article>('Article', ArticleSchema)
+const ArticleHistory = mongoose.model<ArticleHistory>('ArticleHistory', ArticleHistorySchema)
 
-module.exports = Article
+module.exports = ArticleHistory
