@@ -77,7 +77,7 @@ export const github = async (code: string) => {
         email: email,
         roles: ['publisher'],
       })
-      return generateToken(user.id, email, name, ['provider'])
+      return generateToken(user.id, email, name, ['publisher'])
     }
     // return token if existing user
     return generateToken(foundUser.id, foundUser.email, foundUser.name, foundUser.roles)
