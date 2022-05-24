@@ -8,6 +8,7 @@ export interface Article {
   deletedAt?: null | Date
   createdBy?: string
   edited?: number
+  deletedBy?: string
 }
 
 export interface ArticleHistory extends Article {

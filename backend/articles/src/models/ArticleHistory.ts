@@ -47,7 +47,7 @@ const ArticleHistorySchema = new mongoose.Schema<ArticleHistory>(
 
 ArticleHistorySchema.set('toJSON', {
   transform: function (_, ret) {
-    delete ret._v
+    delete ret.__v
   },
 })
 

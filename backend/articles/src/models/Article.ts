@@ -30,6 +30,10 @@ const ArticleSchema = new mongoose.Schema<Article>(
       default: null,
       type: Date,
     },
+    deletedBy: {
+      default: null,
+      type: mongoose.Schema.Types.ObjectId,
+    },
     edited: {
       type: Number,
       default: 0,
@@ -40,7 +44,7 @@ const ArticleSchema = new mongoose.Schema<Article>(
 
 ArticleSchema.set('toJSON', {
   transform: function (_, ret) {
-    delete ret._v
+    delete ret.__v
   },
 })
 

@@ -4,6 +4,12 @@ import { Article, ArticleHistory } from '../@types/Article'
 const Article = mongoose.model('Article')
 const ArticleHistory = mongoose.model('ArticleHistory')
 
+interface UserRole {
+  isAdmin: boolean
+  isPublisher: boolean
+  userId: string | null
+}
+
 export const create = async (article: Article) => {
   try {
     const newArticle = await Article.create(article)
@@ -14,7 +20,7 @@ export const create = async (article: Article) => {
   }
 }
 
-export const update = async (article: Article, articleId: string) => {
+export const update = async (article: Article, articleId: string, updatedBy: string | null) => {
   try {
     // find the article
     const foundArticle: Article | null = await Article.findOne({
@@ -35,7 +41,7 @@ export const update = async (article: Article, articleId: string) => {
       keywords: foundArticle.keywords,
       metaDesc: foundArticle.metaDesc,
       articleId: foundArticle.id,
-      updatedBy: null,
+      updatedBy: updatedBy,
       deletedAt: foundArticle.deletedAt,
       createdBy: foundArticle.createdBy,
       edited: foundArticle.edited,
@@ -59,14 +65,36 @@ export const update = async (article: Article, articleId: string) => {
   }
 }
 
-export const getAll = async () => {
-  return await Article.find({ deletedAt: { $eq: null } })
+export const getAll = async (userRole: UserRole) => {
+  if (userRole.isAdmin) {
+    return await Article.find({ deletedAt: { $eq: null } })
+  }
+  return await Article.find({ deletedAt: { $eq: null }, createdBy: { $eq: userRole.userId } })
 }
 
-export const getOne = async ({ slug }: { slug: string }) => {
-  return Article.findOne({ slug: slug, deletedAt: { $eq: null } })
+export const getOne = async ({ slug, userRole }: { slug: string; userRole: UserRole }) => {
+  if (userRole.isAdmin) {
+    return Article.findOne({ slug: slug, deletedAt: { $eq: null } })
+  }
+  return Article.findOne({
+    slug: slug,
+    deletedAt: { $eq: null },
+    createdBy: { $eq: userRole.userId },
+  })
 }
 
-export const destroy = async ({ articleId }: { articleId: string }) => {
-  return Article.findOneAndUpdate({ id: articleId }, { deletedAt: new Date() })
+export const destroy = async (
+  { articleId, userRole }: { articleId: string; userRole: UserRole },
+  deletedBy: string | null
+) => {
+  if (userRole.isAdmin) {
+    return Article.findOneAndUpdate(
+      { id: articleId },
+      { deletedAt: new Date(), deletedBy: deletedBy }
+    )
+  }
+  return Article.findOneAndUpdate(
+    { id: articleId, createdBy: { $eq: userRole.userId } },
+    { deletedAt: new Date(), deletedBy: deletedBy }
+  )
 }
