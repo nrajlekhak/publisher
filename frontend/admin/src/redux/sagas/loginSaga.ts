@@ -1,6 +1,6 @@
 import { takeEvery, put, call } from 'redux-saga/effects';
 import * as ActionTypes from '@constants/actionTypes';
-import { API } from '@config/axios';
+import { GuestAPI } from '@config/axios';
 
 export function* login(action: {
   type: string;
@@ -62,7 +62,7 @@ export function* oAuthLogin(action: {
 
 async function loginService(data: { email: string; password: string }) {
   try {
-    const res = await API.post('/auth/login', data);
+    const res = await GuestAPI.post('/auth/login', data);
     return res.data;
   } catch (e: any) {
     throw e;
@@ -76,7 +76,7 @@ async function oAuthLoginService({
   code: string;
   service: string;
 }) {
-  const res = await API.get(`/auth/${service}-callback?code=${code}`);
+  const res = await GuestAPI.get(`/auth/${service}-callback?code=${code}`);
   return res.data;
 }
 

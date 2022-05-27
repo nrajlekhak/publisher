@@ -6,7 +6,7 @@ const initialState = {
 
 export default (state = initialState, action: any) => {
   switch (action.type) {
-    case ActionTypes.Article.SET_ARTICLE: {
+    case ActionTypes.Publisher.SET_ARTICLES: {
       return {
         ...state,
         articles: action.payload,

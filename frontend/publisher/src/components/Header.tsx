@@ -1,5 +1,4 @@
-import React, { useContext } from 'react';
-import { ReactReduxContext } from 'react-redux';
+import React from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import HeaderUser from './HeaderUser';
 import { useSelector } from 'react-redux';

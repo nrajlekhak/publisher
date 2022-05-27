@@ -8,10 +8,5 @@ export interface Article {
   authorName: string;
   publishedOn: string;
   edited: string;
-  featured_image?: string;
-}
-
-export interface ArticleHistory extends Article {
-  articleId: string;
-  updatedBy: string;
+  featured_image: string;
 }

@@ -1,12 +1,13 @@
 import { combineReducers } from 'redux';
 
 import articleReducer from '@redux/reducer/articleReducer';
-import * as ActionTypes from '@constants/actionTypes';
 import authReducer from '@redux/reducer/authReducer';
+import publisherReducer from './publisherReducer';
 
 const appReducer = combineReducers({
   article: articleReducer,
   auth: authReducer,
+  publisher: publisherReducer,
 });
 
 const rootReducer = (state: any, action: any) => {
