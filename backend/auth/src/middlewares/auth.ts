@@ -17,4 +17,3 @@ export async function auth(req: Request, res: Response, next: NextFunction) {
     res.sendStatus(401)
   }
 }
-

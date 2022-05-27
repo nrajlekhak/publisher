@@ -9,7 +9,7 @@ export const getAll = async () => {
 
 export const getOne = async ({ slug }: { slug: string }) => {
   try {
-    let query: Record<string, unknown> = { slug: { $eq: slug }, deletedAt: { $eq: null } }
+    const query: Record<string, unknown> = { slug: { $eq: slug }, deletedAt: { $eq: null } }
 
     const article = await Article.findOne(query)
 

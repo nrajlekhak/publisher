@@ -51,7 +51,7 @@ const ArticleSchema = new mongoose.Schema<Article>(
 ArticleSchema.set('toJSON', {
   transform: function (_, ret) {
     delete ret.__v
-    ret.publishedOn = new Date(ret.createdAt).toDateString();
+    ret.publishedOn = new Date(ret.createdAt).toDateString()
   },
 })
 

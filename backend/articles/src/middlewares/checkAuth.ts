@@ -18,7 +18,7 @@ export const checkRoles =
       if (!roles.some((r) => user.roles.includes(r)) && roles.length > 0)
         throw { message: 'Permission Denied', status: 403 }
       req.user = user
-      
+
       // add user roles to request
       req.isAdmin = user.roles.includes('admin') ? true : false
       req.isPublisher = user.roles.includes('publisher') ? true : false
