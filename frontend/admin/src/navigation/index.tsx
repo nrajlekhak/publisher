@@ -15,6 +15,7 @@ import ArticleDetails from 'publisher/ArticleDetails';
 
 import OAuthLogin from '@pages/Login/OAuthLogin';
 import GuestRoute, { GuestRouteProps } from './GuestRoute';
+import Details from '@pages/Article/Details';
 
 const index = () => {
   const defaultProtectedRouteProps: Omit<ProtectedRouteProps, 'children'> = {
@@ -34,7 +35,8 @@ const index = () => {
         element={<ProtectedRoute {...defaultProtectedRouteProps} />}
       >
         <Route path='articles/create' element={<Create />} />
-        <Route path='articles/:id/edit' element={<Edit />} />
+        <Route path='articles/:slug/edit' element={<Edit />} />
+        <Route path='articles/:slug' element={<Details />} />
         <Route path='articles' element={<Article />} />
       </Route>
 

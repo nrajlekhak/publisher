@@ -25,6 +25,9 @@ const ArticleHistorySchema = new mongoose.Schema<ArticleHistory>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    featured_image: {
+      type: String,
+    },
     deletedAt: {
       default: null,
       type: Date,

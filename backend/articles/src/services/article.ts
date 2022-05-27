@@ -24,14 +24,12 @@ export const update = async (article: Article, articleId: string, updatedBy: str
   try {
     // find the article
     const foundArticle: Article | null = await Article.findOne({
-      id: articleId,
+      id: { $eq: articleId },
       deletedAt: { $eq: null },
     })
     if (!foundArticle) {
       throw { message: 'Article not found' }
     }
-
-    console.log('article found')
 
     // copy it to ArticleHistory
     await ArticleHistory.create({
@@ -40,23 +38,15 @@ export const update = async (article: Article, articleId: string, updatedBy: str
       slug: foundArticle.slug,
       keywords: foundArticle.keywords,
       metaDesc: foundArticle.metaDesc,
-      articleId: foundArticle.id,
+      articleId: articleId,
       updatedBy: updatedBy,
       deletedAt: foundArticle.deletedAt,
       createdBy: foundArticle.createdBy,
       edited: foundArticle.edited,
     })
-    console.log('article copied')
 
-    // update the article
-    const updatedArticle = await Article.findOneAndUpdate(
-      { id: articleId },
-      { ...article, edited: foundArticle.edited ? foundArticle.edited + 1 : 1 },
-      {
-        new: true,
-      }
-    )
-    console.log('article updated')
+    //update the article
+    const updatedArticle = Article.updateOne({ _id: { $eq: articleId } }, { $set: article }).exec()
 
     return updatedArticle
   } catch (err) {
@@ -73,14 +63,24 @@ export const getAll = async (userRole: UserRole) => {
 }
 
 export const getOne = async ({ slug, userRole }: { slug: string; userRole: UserRole }) => {
-  if (userRole.isAdmin) {
-    return Article.findOne({ slug: slug, deletedAt: { $eq: null } })
+  try {
+    let query: Record<string, unknown> = { slug: { $eq: slug }, deletedAt: { $eq: null } }
+
+    if (!userRole.isAdmin) {
+      query = { slug: { $eq: slug }, deletedAt: { $eq: null }, createdBy: { $eq: userRole.userId } }
+    }
+
+    const article = await Article.findOne(query)
+    if (!article) {
+      throw { message: ' article not found' }
+    }
+    const articleHistories = await ArticleHistory.find({ articleId: { $eq: article.id } })
+
+    return { article, articleHistories }
+  } catch (e) {
+    console.error(e)
+    throw e
   }
-  return Article.findOne({
-    slug: slug,
-    deletedAt: { $eq: null },
-    createdBy: { $eq: userRole.userId },
-  })
 }
 
 export const destroy = async (
@@ -88,13 +88,13 @@ export const destroy = async (
   deletedBy: string | null
 ) => {
   if (userRole.isAdmin) {
-    return Article.findOneAndUpdate(
-      { id: articleId },
-      { deletedAt: new Date(), deletedBy: deletedBy }
-    )
+    return Article.updateOne(
+      { _id: { $eq: articleId } },
+      { $set: { deletedAt: new Date(), deletedBy: deletedBy, edited: 1 } }
+    ).exec()
   }
-  return Article.findOneAndUpdate(
-    { id: articleId, createdBy: { $eq: userRole.userId } },
-    { deletedAt: new Date(), deletedBy: deletedBy }
-  )
+  return Article.updateOne(
+    { _id: { $eq: articleId }, createdBy: { $eq: userRole.userId } },
+    { $set: { deletedAt: new Date(), deletedBy: deletedBy, edited: 1 } }
+  ).exec()
 }

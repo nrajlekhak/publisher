@@ -1,59 +1,44 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Article } from '@@types/Article';
+import { useNavigate, Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import Swal from 'sweetalert2';
+
+import * as ActionTypes from '@constants/actionTypes';
 
 interface TableProps {
   title: string;
+  data: Array<Article>;
+  listItems: Record<string, string>[];
 }
 
-const Table = ({ title }: TableProps) => {
+const Table = ({ title, data, listItems }: TableProps) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const getKeyValue = (key: string, data: Record<string, any>) => {
+    return data[key];
+  };
+
+  const handleDelete = (id: string) => {
+    Swal.fire({
+      title: 'Are you sure?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch({ type: ActionTypes.Article.DELETE_ARTICLE, payload: id });
+      }
+    });
+  };
+
   return (
     <div className='w-full'>
       <div className='mx-auto container bg-white dark:bg-gray-800 shadow rounded'>
         <div className='flex flex-col lg:flex-row p-4 lg:p-8 justify-end lg:items-stretch mr-10 pr-5 '>
           <div className='flex flex-row items-end '>
-            <div className='flex items-right lg:border-l lg:border-r border-gray-300 dark:border-gray-200 py-3 lg:py-0 lg:px-6'>
-              <p
-                className='text-base text-gray-600 dark:text-gray-400'
-                id='page-view'
-              >
-                Viewing 1 - 20 of 60
-              </p>
-              <a className='text-gray-600 dark:text-gray-400 ml-2 border-transparent border cursor-pointer rounded'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='icon icon-tabler icon-tabler-chevron-left'
-                  width={20}
-                  height={20}
-                  viewBox='0 0 24 24'
-                  strokeWidth='1.5'
-                  stroke='currentColor'
-                  fill='none'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                >
-                  <path stroke='none' d='M0 0h24v24H0z' />
-                  <polyline points='15 6 9 12 15 18' />
-                </svg>
-              </a>
-              <a className='text-gray-600 dark:text-gray-400 border-transparent border rounded focus:outline-none cursor-pointer'>
-                <svg
-                  xmlns='http://www.w3.org/2000/svg'
-                  className='icon icon-tabler icon-tabler-chevron-right'
-                  width={20}
-                  height={20}
-                  viewBox='0 0 24 24'
-                  strokeWidth='1.5'
-                  stroke='currentColor'
-                  fill='none'
-                  strokeLinecap='round'
-                  strokeLinejoin='round'
-                >
-                  <path stroke='none' d='M0 0h24v24H0z' />
-                  <polyline points='9 6 15 12 9 18' />
-                </svg>
-              </a>
-            </div>
+            <div className='flex items-right lg:border-l lg:border-r border-gray-300 dark:border-gray-200 py-3 lg:py-0 lg:px-6'></div>
 
             <div className='lg:ml-6 flex items-center'>
               <div
@@ -85,102 +70,93 @@ const Table = ({ title }: TableProps) => {
             <thead>
               <tr className='w-full h-16 border-gray-300 dark:border-gray-200 border-b py-8'>
                 <th className='pl-8 text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'></th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'>
-                  Invoice Number
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'>
-                  Client
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'>
-                  Company Contact
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'>
-                  Amount
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'>
-                  Date
-                </th>
-                <th className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'>
-                  <div className='opacity-0 w-2 h-2 rounded-full bg-indigo-400' />
-                </th>
-                <td className='text-gray-600 dark:text-gray-400 font-normal pr-8 text-left text-sm tracking-normal leading-4'>
-                  More
-                </td>
+                {listItems &&
+                  listItems.map((item) => (
+                    <th
+                      className='text-gray-600 dark:text-gray-400 font-normal pr-6 text-left text-sm tracking-normal leading-4'
+                      key={item.key}
+                    >
+                      {item.title}
+                    </th>
+                  ))}
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {new Array(20).fill('').map((_, index) => (
-                <tr
-                  className='h-24 border-gray-300 dark:border-gray-200 border-b'
-                  key={index}
-                >
-                  <td className='pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4'></td>
-
-                  <td className='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
-                    #MC10023
-                  </td>
-                  <td className='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
-                    Toyota Motors
-                  </td>
-                  <td className='pr-6 whitespace-no-wrap'>
-                    <div className='flex items-center'>
-                      <div className='h-8 w-8'>
-                        <img
-                          src='https://tuk-cdn.s3.amazonaws.com/assets/components/advance_tables/at_1.png'
-                          alt=''
-                          className='h-full w-full rounded-full overflow-hidden shadow'
-                        />
-                      </div>
-                      <p className='ml-2 text-gray-800 dark:text-gray-100 tracking-normal leading-4 text-sm'>
-                        Carrie Anthony
-                      </p>
-                    </div>
-                  </td>
-                  <td className='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
-                    $2,500
-                  </td>
-                  <td className='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'>
-                    02.03.20
-                  </td>
-                  <td className='pr-6'>
-                    <div className='w-2 h-2 rounded-full bg-indigo-400' />
-                  </td>
-                  <td className='pr-8 relative'>
-                    <div className='dropdown-content mt-8 absolute left-0 -ml-12 shadow-md z-10 hidden w-32'>
-                      <ul className='bg-white dark:bg-gray-800 shadow rounded py-1'>
-                        <li className='cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal'>
-                          Edit
-                        </li>
-                        <li className='cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal'>
-                          Delete
-                        </li>
-                        <li className='cursor-pointer text-gray-600 dark:text-gray-400 text-sm leading-3 tracking-normal py-3 hover:bg-indigo-700 hover:text-white px-3 font-normal'>
-                          Duplicate
-                        </li>
-                      </ul>
-                    </div>
-                    <button className='text-gray-500 rounded cursor-pointer border border-transparent focus:outline-none'>
-                      <svg
-                        xmlns='http://www.w3.org/2000/svg'
-                        className='icon icon-tabler icon-tabler-dots-vertical dropbtn'
-                        width={28}
-                        height={28}
-                        viewBox='0 0 24 24'
-                        strokeWidth='1.5'
-                        stroke='currentColor'
-                        fill='none'
-                        strokeLinecap='round'
-                        strokeLinejoin='round'
+              {data?.length > 0 &&
+                data.map((article, index) => (
+                  <tr
+                    className='h-24 border-gray-300 dark:border-gray-200 border-b'
+                    key={index}
+                  >
+                    <td className='pl-8 pr-6 text-left whitespace-no-wrap text-sm text-gray-800 dark:text-gray-100 tracking-normal leading-4'></td>
+                    {listItems &&
+                      listItems.map((item) => (
+                        <td
+                          className='text-sm pr-6 whitespace-no-wrap text-gray-800 dark:text-gray-100 tracking-normal leading-4'
+                          key={`${item.key}-td`}
+                        >
+                          {getKeyValue(item.key, article)}
+                        </td>
+                      ))}
+                    <td>
+                      <Link to={`/admin/articles/${article.slug}`}>
+                        <svg
+                          className='inline'
+                          viewBox='0 0 20 20'
+                          width={40}
+                          height={30}
+                        >
+                          <path d='M10,6.978c-1.666,0-3.022,1.356-3.022,3.022S8.334,13.022,10,13.022s3.022-1.356,3.022-3.022S11.666,6.978,10,6.978M10,12.267c-1.25,0-2.267-1.017-2.267-2.267c0-1.25,1.016-2.267,2.267-2.267c1.251,0,2.267,1.016,2.267,2.267C12.267,11.25,11.251,12.267,10,12.267 M18.391,9.733l-1.624-1.639C14.966,6.279,12.563,5.278,10,5.278S5.034,6.279,3.234,8.094L1.609,9.733c-0.146,0.147-0.146,0.386,0,0.533l1.625,1.639c1.8,1.815,4.203,2.816,6.766,2.816s4.966-1.001,6.767-2.816l1.624-1.639C18.536,10.119,18.536,9.881,18.391,9.733 M16.229,11.373c-1.656,1.672-3.868,2.594-6.229,2.594s-4.573-0.922-6.23-2.594L2.41,10l1.36-1.374C5.427,6.955,7.639,6.033,10,6.033s4.573,0.922,6.229,2.593L17.59,10L16.229,11.373z'></path>
+                        </svg>
+                      </Link>
+                      <Link to={`/admin/articles/${article.slug}/edit`}>
+                        <svg
+                          className='inline'
+                          xmlns='http://www.w3.org/2000/svg'
+                          enableBackground='new 0 0 24 24'
+                          height='24'
+                          viewBox='0 0 24 24'
+                          width='24'
+                        >
+                          <g>
+                            <rect fill='none' height='24' width='24' />
+                          </g>
+                          <g>
+                            <g>
+                              <rect height='4' width='4' x='10' y='4' />
+                              <rect height='4' width='4' x='4' y='16' />
+                              <rect height='4' width='4' x='4' y='10' />
+                              <rect height='4' width='4' x='4' y='4' />
+                              <polygon points='14,12.42 14,10 10,10 10,14 12.42,14' />
+                              <path d='M20.88,11.29l-1.17-1.17c-0.16-0.16-0.42-0.16-0.58,0L18.25,11L20,12.75l0.88-0.88C21.04,11.71,21.04,11.45,20.88,11.29z' />
+                              <polygon points='11,18.25 11,20 12.75,20 19.42,13.33 17.67,11.58' />
+                              <rect height='4' width='4' x='16' y='4' />
+                            </g>
+                          </g>
+                        </svg>
+                      </Link>
+                      <a
+                        href='#'
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleDelete(article._id);
+                        }}
                       >
-                        <path stroke='none' d='M0 0h24v24H0z' />
-                        <circle cx={12} cy={12} r={1} />
-                        <circle cx={12} cy={19} r={1} />
-                        <circle cx={12} cy={5} r={1} />
-                      </svg>
-                    </button>
-                  </td>
-                </tr>
-              ))}
+                        <svg
+                          xmlns='http://www.w3.org/2000/svg'
+                          height='24'
+                          viewBox='0 0 24 24'
+                          width='24'
+                          className='inline'
+                        >
+                          <path d='M0 0h24v24H0z' fill='none' />
+                          <path d='M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z' />
+                        </svg>
+                      </a>
+                    </td>
+                  </tr>
+                ))}
             </tbody>
           </table>
         </div>

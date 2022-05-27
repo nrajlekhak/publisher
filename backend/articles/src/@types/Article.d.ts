@@ -9,6 +9,8 @@ export interface Article {
   createdBy?: string
   edited?: number
   deletedBy?: string
+  authorName?: string
+  featured_image?: string
 }
 
 export interface ArticleHistory extends Article {

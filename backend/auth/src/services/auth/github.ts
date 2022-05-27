@@ -16,7 +16,7 @@ async function generateToken(id: string, email: string, name: string, roles: str
     roles,
   })
   await User.updateOne({ id, token })
-  return { token, id, roles }
+  return { token, id, roles, name }
 }
 
 /**

@@ -1,11 +1,19 @@
 import axios from 'axios';
 
-const API = axios.create({
+const GuestAPI = axios.create({
   baseURL: process.env.REACT_APP_API_URL,
   headers: {
     'Content-Type': 'application/json',
   },
 });
+
+const API = axios.create({
+  baseURL: process.env.REACT_APP_ARTICLE_API_URL,
+  headers: {
+    'Content-Type': 'application/json',
+  },
+});
+
 // request header
 API.interceptors.request.use(
   async (config: any) => {
@@ -35,4 +43,4 @@ API.interceptors.response.use(
     })
 );
 
-export { API };
+export { API, GuestAPI };

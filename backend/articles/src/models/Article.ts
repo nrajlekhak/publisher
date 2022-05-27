@@ -26,6 +26,12 @@ const ArticleSchema = new mongoose.Schema<Article>(
       type: Schema.Types.ObjectId,
       ref: 'User',
     },
+    authorName: {
+      type: String,
+    },
+    featured_image: {
+      type: String,
+    },
     deletedAt: {
       default: null,
       type: Date,
@@ -45,6 +51,7 @@ const ArticleSchema = new mongoose.Schema<Article>(
 ArticleSchema.set('toJSON', {
   transform: function (_, ret) {
     delete ret.__v
+    ret.publishedOn = new Date(ret.createdAt).toDateString()
   },
 })
 

@@ -1,18 +1,23 @@
-import { Article } from '@@types/Article';
-import { API } from '@config/axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
-export default function ArticleDetails() {
-  const [article, setArticle] = useState<Article | null>(null);
+import { Article, ArticleHistory } from '@@types/Article';
+import { API } from '@config/axios';
+import ArticleSidebar from '@components/article/ArticleSidebar';
 
+export default function Details() {
+  const [article, setArticle] = useState<Article | null>(null);
+  const [articleHistory, setArticleHistory] = useState<ArticleHistory[] | null>(
+    null
+  );
   const [error, setError] = useState(false);
   const { slug } = useParams();
 
   const getArticle = async (slug: string) => {
     try {
-      const res = await API.get(`/${slug}`);
+      const res = await API.get(`/articles/${slug}`);
       setArticle(res.data.article);
+      setArticleHistory(res.data.articleHistories);
     } catch (err) {
       setError(true);
     }
@@ -24,7 +29,6 @@ export default function ArticleDetails() {
 
   if (error) return <div>Error</div>;
   if (!article) return <div>Loading...</div>;
-
   return (
     <>
       <div className='dark:bg-gray-900'>
@@ -80,43 +84,7 @@ export default function ArticleDetails() {
               </div>
             </div>
           </div>
-          <div className='lg:w-1/4'>
-            <div className='flex justify-center items-center  my-10 md:mt-0 pb-5'>
-              <img
-                className='w-full'
-                src='https://i.ibb.co/181DvLN/Project-Cover-6.png'
-                alt='laptops'
-              />
-            </div>
-            <div className=' px-4 md:px-0 lg:px-16 mt-10 xl:mt-0  w-full flex bg-gradient-to-l from-indigo-600 to-indigo-700'>
-              <div className='flex flex-col lg:justify-start  lg:items-start  my-10'>
-                <div>
-                  <p className='md:text-2xl text-lg font-semibold text-center lg:text-left leading-normal text-white'>
-                    Get Webber for your organization
-                  </p>
-                </div>
-                <div className='mt-8'>
-                  <p className='md:text-base text-xs text-center lg:text-left leading-normal text-white'>
-                    If you're looking for random facts, you've arrived at the
-                    correct webpage. The Random Fact Generator has thousands of
-                    facts ready to be revealed with a simple click of a mouse.
-                  </p>
-                </div>
-                <div className='mt-8 flex flex-row justify-start items-center space-x-4'>
-                  <div>
-                    <button className='btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800 text-xs lg:text-base border border-white py-2 px-4 md:py-4 md:px-8 bg-white rounded-sm text-indigo-700 hover:bg-gray-100'>
-                      Start trial
-                    </button>
-                  </div>
-                  <div>
-                    <button className='btn focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-800 text-xs lg:text-base border border-white py-2 px-4 md:py-4 md:px-8 text-white rounded-sm hover:bg-white hover:text-indigo-700'>
-                      Contact sales
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <ArticleSidebar articleHistory={articleHistory} />
         </div>
       </div>
     </>

@@ -6,10 +6,18 @@ import { Formik } from 'formik';
 import { PrimaryButton, SecondaryButton } from '@components/common/Button';
 import TextAreaWysiwyg from '@components/formElements/TextAreaWysiwyg';
 import TextField from '@components/formElements/TextField';
-import * as ActionTypes from '@constants/actionTypes';
 import store from '@redux/store';
+import { Article } from '@@types/Article';
 
-function Form(): JSX.Element {
+function Form({
+  edit = false,
+  article = null,
+  action,
+}: {
+  edit?: boolean;
+  article?: Article | null;
+  action: string;
+}): JSX.Element {
   const navigate = useNavigate();
 
   return (
@@ -21,21 +29,24 @@ function Form(): JSX.Element {
               <div className='bg-white rounded shadow '>
                 <Formik
                   initialValues={{
-                    title: '',
-                    slug: '',
-                    keywords: '',
-                    description: '',
-                    metaDesc: '',
+                    title: article?.title || '',
+                    slug: article?.slug || '',
+                    keywords: article?.keywords || '',
+                    description: article?.description || '',
+                    metaDesc: article?.metaDesc || '',
+                    featured_image: article?.featured_image || '',
                   }}
                   onSubmit={(e) => {
                     store.dispatch({
-                      type: ActionTypes.Article.CREATE_ARTICLE,
+                      type: action,
                       payload: {
+                        _id: edit ? article?._id : '',
                         title: e.title,
                         slug: e.slug,
                         description: e.description,
                         keywords: e.keywords,
                         metaDesc: e.metaDesc,
+                        featured_image: e.featured_image,
                       },
                     });
                   }}
@@ -44,7 +55,7 @@ function Form(): JSX.Element {
                     <form onSubmit={props.handleSubmit}>
                       <div className=' px-7'>
                         <p className='text-xl font-semibold leading-tight text-gray-800'>
-                          Create Article
+                          {edit ? 'Edit' : 'Create'} Article
                         </p>
                         <div className='grid w-full grid-cols-1 lg:grid-cols-2 md:grid-cols-1 gap-7 mt-7 '>
                           <TextField
@@ -75,6 +86,14 @@ function Form(): JSX.Element {
                             value={props.values.metaDesc}
                             onChange={props.handleChange}
                           />
+
+                          <TextField
+                            title='Featured Image'
+                            desc='URL to the featured image'
+                            name='featured_image'
+                            value={props.values.featured_image}
+                            onChange={props.handleChange}
+                          />
                         </div>
                       </div>
                       <TextAreaWysiwyg
@@ -91,10 +110,10 @@ function Form(): JSX.Element {
                         <SecondaryButton
                           title='Cancel'
                           type='button'
-                          onClick={() => navigate('/articles')}
+                          onClick={() => navigate('/admin/articles')}
                         />
                         <PrimaryButton
-                          title='Create'
+                          title={edit ? 'Update' : 'Create'}
                           type='submit'
                           onClick={() => {}}
                         />

@@ -6,7 +6,7 @@ const articleRouter = express.Router()
 
 articleRouter.post('/create', async (req: Request, res: Response) => {
   try {
-    const { title, description, keywords, metaDesc, slug } = req.body
+    const { title, description, keywords, metaDesc, slug, featured_image } = req.body
 
     const article = await create({
       title,
@@ -15,6 +15,8 @@ articleRouter.post('/create', async (req: Request, res: Response) => {
       metaDesc,
       slug,
       createdBy: req.user?.id,
+      authorName: req.user?.name,
+      featured_image,
     })
     return res.status(201).json(article)
   } catch (e) {
@@ -36,19 +38,23 @@ articleRouter.get('/:slug', async (req: Request, res: Response) => {
 })
 
 articleRouter.patch('/update/:id', async (req: Request, res: Response) => {
-  const { title, description, keywords, metaDesc, slug } = req.body
-  const { id } = req.params
-  const updatedArticle = await update(
-    { title, description, keywords, metaDesc, slug },
-    id,
-    req.user?.id || null
-  )
-  return res.status(200).json(updatedArticle)
+  try {
+    const { title, description, keywords, metaDesc, slug, featured_image } = req.body
+    const { id } = req.params
+    const updatedArticle = await update(
+      { title, description, keywords, metaDesc, slug, featured_image },
+      id,
+      req.user?.id || null
+    )
+    return res.status(200).json(updatedArticle)
+  } catch (e) {
+    return res.status(422).json(e)
+  }
 })
 
 articleRouter.delete('/:id', async (req: Request, res: Response) => {
   const { id } = req.params
-  await destroy(
+  const resp = await destroy(
     {
       articleId: id,
       userRole: {
@@ -59,6 +65,7 @@ articleRouter.delete('/:id', async (req: Request, res: Response) => {
     },
     req.user?.id || null
   )
+  console.log(resp)
   return res.status(200).json({ message: 'Article Deleted' })
 })
 

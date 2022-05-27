@@ -2,6 +2,7 @@ import * as ActionTypes from '@constants/actionTypes';
 
 const initialState = {
   isAuthenticated: localStorage.getItem('isAuthenticated'),
+  name: localStorage.getItem('name'),
   roles: [],
   loginError: {},
   loading: false,
@@ -12,10 +13,12 @@ export default (state = initialState, action: any) => {
     case ActionTypes.Auth.SAVE_LOGIN:
       localStorage.setItem('token', action.payload.token);
       localStorage.setItem('isAuthenticated', 'true');
+      localStorage.setItem('name', action.payload.name);
       return {
         ...state,
         isAuthenticated: true,
         roles: action.payload.roles,
+        name: action.payload.name,
       };
 
     case ActionTypes.Auth.LOGIN_ERROR: {
@@ -28,6 +31,7 @@ export default (state = initialState, action: any) => {
     case ActionTypes.LOGOUT: {
       localStorage.removeItem('token');
       localStorage.removeItem('isAuthenticated');
+      localStorage.removeItem('name');
       return {
         ...state,
         isAuthenticated: false,
