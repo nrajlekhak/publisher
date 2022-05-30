@@ -20,8 +20,8 @@ export const getOne = async ({ slug }: { slug: string }) => {
       {
         $lookup: {
           from: 'comments',
-          localField: 'articles._id',
-          foreignField: 'comments.articleId',
+          localField: '_id',
+          foreignField: 'articleId',
           as: 'comments',
         },
       },
