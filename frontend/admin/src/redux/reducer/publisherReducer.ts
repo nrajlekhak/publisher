@@ -2,6 +2,7 @@ import * as ActionTypes from '@constants/actionTypes';
 
 const initialState = {
   articles: [],
+  article: null,
 };
 
 export default (state = initialState, action: any) => {
@@ -10,6 +11,13 @@ export default (state = initialState, action: any) => {
       return {
         ...state,
         articles: action.payload,
+      };
+    }
+
+    case ActionTypes.Publisher.SET_ARTICLE: {
+      return {
+        ...state,
+        article: action.payload?.article,
       };
     }
 

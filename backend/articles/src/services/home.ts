@@ -11,9 +11,25 @@ export const getOne = async ({ slug }: { slug: string }) => {
   try {
     const query: Record<string, unknown> = { slug: { $eq: slug }, deletedAt: { $eq: null } }
 
-    const article = await Article.findOne(query)
+    const article = await Article.aggregate([
+      {
+        $match: {
+          slug: { $eq: slug },
+        },
+      },
+      {
+        $lookup: {
+          from: 'comments',
+          localField: '_id',
+          foreignField: 'articleId',
+          as: 'comments',
+        },
+      },
+    ])
 
-    return { article }
+    if (!article.length) throw { message: 'Article not found' }
+
+    return { article: article[0] }
   } catch (e) {
     console.error(e)
     throw e

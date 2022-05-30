@@ -8,6 +8,10 @@ export function* login(action: {
 }) {
   try {
     yield put({
+      type: ActionTypes.Auth.LOGIN_ERROR,
+      payload: null,
+    });
+    yield put({
       type: ActionTypes.Auth.LOADING,
       payload: true,
     });

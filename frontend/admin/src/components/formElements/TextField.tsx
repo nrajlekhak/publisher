@@ -5,8 +5,9 @@ interface Props {
   title: string;
   name: string;
   value: string;
-  onChange: (e: React.ChangeEvent) => void;
+  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   type?: 'email' | 'text' | 'password';
+  errors?: boolean | string;
 }
 
 export default function TextField({
@@ -15,6 +16,7 @@ export default function TextField({
   value,
   name,
   type,
+  errors,
   onChange,
 }: Props) {
   return (
@@ -29,6 +31,7 @@ export default function TextField({
         value={value}
         onChange={(val) => onChange(val)}
       />
+      <p className='mt-3 text-xs leading-3 text-red-600'>{errors}</p>
       <p className='mt-3 text-xs leading-3 text-gray-600'>{desc}</p>
     </div>
   );

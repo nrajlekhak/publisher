@@ -32,7 +32,7 @@ authRouter.route('/login').post(async (req: Request, res: Response) => {
     return res.json({ token, id: foundUser.id, roles: foundUser.roles, name: foundUser.name })
   } catch (error) {
     console.error(error)
-    return res.status(500).json(error)
+    return res.status(422).json(error)
   }
 })
 
