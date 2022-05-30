@@ -4,7 +4,7 @@ const initialState = {
   isAuthenticated: localStorage.getItem('isAuthenticated'),
   name: localStorage.getItem('name'),
   roles: [],
-  loginError: {},
+  loginError: null,
   loading: false,
 };
 

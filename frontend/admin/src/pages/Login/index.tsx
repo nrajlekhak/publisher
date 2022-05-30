@@ -13,8 +13,9 @@ function MyApp() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { isAuthenticated } = useSelector((state: any) => state.reducer.auth);
-
+  const { isAuthenticated, loginError } = useSelector(
+    (state: any) => state.reducer.auth
+  );
   React.useEffect(() => {
     if (isAuthenticated) {
       navigate('/admin/articles');
@@ -79,6 +80,9 @@ function MyApp() {
                   />
                 </div>
                 <div className='mt-8'>
+                  <div className='text-red-600 text-center p-1'>
+                    {loginError}
+                  </div>
                   <PrimaryButton
                     type='submit'
                     title='Login'
