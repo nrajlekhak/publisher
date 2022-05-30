@@ -73,9 +73,13 @@ export default function Details() {
             <div className='mx-auto container w-full flex xl:flex-row flex-col justify-between items-start mt-12 px-6 lg:px-0'>
               <div className='flex flex-col justify-start items-start px-3'>
                 <div>
-                  <h2 className='text-gray-800 dark:text-white lg:text-3xl text-2xl font-bold leading-7'>
-                    The details
-                  </h2>
+                  {article.featured_image && (
+                    <img
+                      className='w-full'
+                      src={article.featured_image}
+                      alt={article.title}
+                    />
+                  )}
                 </div>
                 <div
                   className='mt-8'

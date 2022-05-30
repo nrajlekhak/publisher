@@ -15,6 +15,22 @@ async function getArticlesService() {
   return res.data;
 }
 
+export function* getArticleBySlug(action: { type: string; payload: string }) {
+  try {
+    console.log('getting article')
+    const article: Article = yield call(
+      getArticleBySlugService,
+      action.payload
+    );
+    yield put({ type: ActionTypes.Publisher.SET_ARTICLE, payload: article });
+  } catch (err) {}
+}
+
+async function getArticleBySlugService(slug: string) {
+  const res = await API.get(`/${slug}`);
+  return res.data;
+}
 export function* publisherWatcher() {
   yield takeEvery(ActionTypes.Publisher.GET_ARTICLES, getArticles);
+  yield takeEvery(ActionTypes.Publisher.GET_ARTICLE, getArticleBySlug);
 }

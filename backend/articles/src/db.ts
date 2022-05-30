@@ -30,6 +30,7 @@ const init = async ({}) => {
 function registerModels() {
   require('./models/Article')
   require('./models/ArticleHistory')
+  require('./models/Comment')
 }
 
 export default { init }

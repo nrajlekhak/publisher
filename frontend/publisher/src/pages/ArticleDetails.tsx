@@ -1,29 +1,22 @@
-import { Article } from '@@types/Article';
-import { API } from '@config/axios';
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+
+import Comments from '@components/Comments';
+import * as ActionTypes from '@constants/actionTypes';
 
 export default function ArticleDetails() {
-  const [article, setArticle] = useState<Article | null>(null);
+  const dispatch = useDispatch();
 
-  const [error, setError] = useState(false);
+  const article = useSelector((state: any) => state.reducer.publisher.article);
+
   const { slug } = useParams();
 
-  const getArticle = async (slug: string) => {
-    try {
-      const res = await API.get(`/${slug}`);
-      setArticle(res.data.article);
-    } catch (err) {
-      setError(true);
-    }
-  };
-
   useEffect(() => {
-    getArticle(slug || '');
+    dispatch({ type: ActionTypes.Publisher.GET_ARTICLE, payload: slug });
   }, [slug]);
 
-  if (error) return <div>Error</div>;
-  if (!article) return <div>Loading...</div>;
+  if (!article) return <>Error</>;
 
   return (
     <>
@@ -69,16 +62,24 @@ export default function ArticleDetails() {
             <div className='mx-auto container w-full flex xl:flex-row flex-col justify-between items-start mt-12 px-6 lg:px-0'>
               <div className='flex flex-col justify-start items-start px-3'>
                 <div>
-                  <h2 className='text-gray-800 dark:text-white lg:text-3xl text-2xl font-bold leading-7'>
-                    The details
-                  </h2>
+                  {article.featured_image && (
+                    <img
+                      className='w-full'
+                      src={article.featured_image}
+                      alt={article.title}
+                    />
+                  )}
                 </div>
                 <div
-                  className='mt-8'
+                  className='mt-8 text-justify'
                   dangerouslySetInnerHTML={{ __html: article.description }}
                 ></div>
               </div>
             </div>
+            <Comments
+              articleId={article._id}
+              comments={article.comments || []}
+            />
           </div>
           <div className='lg:w-1/4'>
             <div className='flex justify-center items-center  my-10 md:mt-0 pb-5'>

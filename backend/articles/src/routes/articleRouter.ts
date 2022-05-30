@@ -25,16 +25,20 @@ articleRouter.post('/create', async (req: Request, res: Response) => {
 })
 
 articleRouter.get('/:slug', async (req: Request, res: Response) => {
-  const { slug } = req.params
-  const article = await getOne({
-    slug,
-    userRole: {
-      isAdmin: req.isAdmin || false,
-      isPublisher: req.isPublisher || false,
-      userId: req.user?.id || null,
-    },
-  })
-  return res.status(200).json(article)
+  try {
+    const { slug } = req.params
+    const article = await getOne({
+      slug,
+      userRole: {
+        isAdmin: req.isAdmin || false,
+        isPublisher: req.isPublisher || false,
+        userId: req.user?.id || null,
+      },
+    })
+    return res.status(200).json(article)
+  } catch (e) {
+    return res.status(422).json(e)
+  }
 })
 
 articleRouter.patch('/update/:id', async (req: Request, res: Response) => {
@@ -53,29 +57,36 @@ articleRouter.patch('/update/:id', async (req: Request, res: Response) => {
 })
 
 articleRouter.delete('/:id', async (req: Request, res: Response) => {
-  const { id } = req.params
-  const resp = await destroy(
-    {
-      articleId: id,
-      userRole: {
-        isAdmin: req.isAdmin || false,
-        isPublisher: req.isPublisher || false,
-        userId: req.user?.id || null,
+  try {
+    const { id } = req.params
+    const resp = await destroy(
+      {
+        articleId: id,
+        userRole: {
+          isAdmin: req.isAdmin || false,
+          isPublisher: req.isPublisher || false,
+          userId: req.user?.id || null,
+        },
       },
-    },
-    req.user?.id || null
-  )
-  console.log(resp)
-  return res.status(200).json({ message: 'Article Deleted' })
+      req.user?.id || null
+    )
+    return res.status(200).json({ message: 'Article Deleted' })
+  } catch (e) {
+    return res.status(422).json(e)
+  }
 })
 
 articleRouter.get('/', async (req: Request, res: Response) => {
-  const articles = await getAll({
-    isAdmin: req.isAdmin || false,
-    isPublisher: req.isPublisher || false,
-    userId: req.user?.id || null,
-  })
-  return res.status(200).json(articles)
+  try {
+    const articles = await getAll({
+      isAdmin: req.isAdmin || false,
+      isPublisher: req.isPublisher || false,
+      userId: req.user?.id || null,
+    })
+    return res.status(200).json(articles)
+  } catch (e) {
+    return res.status(422).json(e)
+  }
 })
 
 export default articleRouter

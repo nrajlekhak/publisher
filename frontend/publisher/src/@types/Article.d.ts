@@ -1,3 +1,5 @@
+import { Comment } from './Comment';
+
 export interface Article {
   _id: string;
   title: string;
@@ -9,4 +11,5 @@ export interface Article {
   publishedOn: string;
   edited: string;
   featured_image: string;
+  comments?: Comment[];
 }
