@@ -7,12 +7,14 @@ interface Props {
   value: string;
   setValue: (e: string) => void;
   name: string;
+  errors?: boolean | string;
 }
 
 export default function TextAreaWysiwyg({
   title,
   desc,
   value,
+  errors,
   setValue,
 }: Props) {
   return (
@@ -26,6 +28,7 @@ export default function TextAreaWysiwyg({
           />
         </div>
       </div>
+      <p className='mt-3 text-xs leading-[15px] text-red-600 px-7'>{errors}</p>
       <p className='mt-3 text-xs leading-[15px] text-gray-600 px-7'>{desc}</p>
     </>
   );

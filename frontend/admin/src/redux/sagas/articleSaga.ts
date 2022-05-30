@@ -5,7 +5,7 @@ import { Article } from '../../@types/Article';
 
 import { history } from '../../App';
 
-export function* getArticle(action: any) {
+export function* getArticle() {
   try {
     const articles: Article[] = yield call(getArticleService);
     yield put({ type: ActionTypes.Article.SET_ARTICLE, payload: articles });
@@ -16,16 +16,32 @@ export function* createArticle(action: { type: string; payload: Article }) {
   try {
     yield call(createArticleService, action.payload);
     yield put({ type: ActionTypes.Article.GET_ARTICLE });
+    yield put({ type: ActionTypes.Article.SET_ERRORS, payload: [] });
     history.push('/admin/articles');
-  } catch (e) {}
+  } catch (e: any) {
+    if (e.response.status == 422) {
+      yield put({
+        type: ActionTypes.Article.SET_ERRORS,
+        payload: e.response.data.errors,
+      });
+    }
+  }
 }
 
 export function* updateArticle(action: { type: string; payload: Article }) {
   try {
     yield call(updateArticleService, action.payload);
     yield put({ type: ActionTypes.Article.GET_ARTICLE });
+    yield put({ type: ActionTypes.Article.SET_ERRORS, payload: [] });
     history.push('/admin/articles');
-  } catch (e) {}
+  } catch (e: any) {
+    if (e.response.status == 422) {
+      yield put({
+        type: ActionTypes.Article.SET_ERRORS,
+        payload: e.response.data.errors,
+      });
+    }
+  }
 }
 
 export function* deleteArticle(action: { type: string; payload: string }) {

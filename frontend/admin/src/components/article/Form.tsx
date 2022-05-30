@@ -2,11 +2,12 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Formik } from 'formik';
+import * as ActionTypes from '@constants/actionTypes';
 
 import { PrimaryButton, SecondaryButton } from '@components/common/Button';
 import TextAreaWysiwyg from '@components/formElements/TextAreaWysiwyg';
 import TextField from '@components/formElements/TextField';
-import store from '@redux/store';
+import { useDispatch, useSelector } from 'react-redux';
 import { Article } from '@@types/Article';
 
 function Form({
@@ -19,6 +20,22 @@ function Form({
   action: string;
 }): JSX.Element {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const errors = useSelector((state: any) => state.reducer.article.errors);
+
+  const [slug, setSlug] = React.useState('');
+
+  const hasErrors = (key: string) => {
+    return errors[key] ? errors[key] : false;
+  };
+
+  const setSlugs = (title: string) => {
+    setSlug(title.trim().toLowerCase().replaceAll(' ', '-'));
+  };
+
+  React.useEffect(() => {
+    dispatch({ type: ActionTypes.Article.SET_ERRORS, payload: [] });
+  }, []);
 
   return (
     <>
@@ -37,12 +54,12 @@ function Form({
                     featured_image: article?.featured_image || '',
                   }}
                   onSubmit={(e) => {
-                    store.dispatch({
+                    dispatch({
                       type: action,
                       payload: {
                         _id: edit ? article?._id : '',
                         title: e.title,
-                        slug: e.slug,
+                        slug: slug || e.slug,
                         description: e.description,
                         keywords: e.keywords,
                         metaDesc: e.metaDesc,
@@ -63,14 +80,23 @@ function Form({
                             desc='Set a simple and precise title'
                             name='title'
                             value={props.values.title}
-                            onChange={props.handleChange}
+                            onChange={(e) => {
+                              props.handleChange(e);
+                              setSlugs(e.target.value);
+                            }}
+                            errors={hasErrors('title')}
                           />
+
                           <TextField
                             title='Slug'
                             desc='Set a SEO Friendly Slug'
                             name='slug'
-                            value={props.values.slug}
-                            onChange={props.handleChange}
+                            value={slug || props.values.slug}
+                            onChange={(e) => {
+                              props.handleChange(e);
+                              setSlug(e.target.value);
+                            }}
+                            errors={hasErrors('slug')}
                           />
                           <TextField
                             title='Keywords'
@@ -78,6 +104,7 @@ function Form({
                             desc='Set Meta Keywords for SEO'
                             value={props.values.keywords}
                             onChange={props.handleChange}
+                            errors={hasErrors('keywords')}
                           />
                           <TextField
                             title='Meta Description'
@@ -85,6 +112,7 @@ function Form({
                             name='metaDesc'
                             value={props.values.metaDesc}
                             onChange={props.handleChange}
+                            errors={hasErrors('metaDesc')}
                           />
 
                           <TextField
@@ -93,6 +121,7 @@ function Form({
                             name='featured_image'
                             value={props.values.featured_image}
                             onChange={props.handleChange}
+                            errors={hasErrors('featured_image')}
                           />
                         </div>
                       </div>
@@ -104,6 +133,7 @@ function Form({
                           props.setFieldValue('description', val)
                         }
                         name='description'
+                        errors={hasErrors('description')}
                       />
                       <hr className='h-[1px] bg-gray-100 my-14' />
                       <div className='flex items-center justify-center px-7 lg:justify-end md:justify-end gap-x-4 gap-y-4'>
