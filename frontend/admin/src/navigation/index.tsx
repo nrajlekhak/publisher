@@ -42,6 +42,7 @@ const index = () => {
 
       <Route element={<GuestRoute {...defaultGuestRouteProps} />}>
         <Route path='/login' element={<Login />} />
+        <Route path='/system/login' element={<Login />} />
         <Route path='/auth/github-callback' element={<OAuthLogin />} />
       </Route>
     </Routes>

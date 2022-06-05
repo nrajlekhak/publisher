@@ -31,6 +31,7 @@ function registerModels() {
   require('./models/Article')
   require('./models/ArticleHistory')
   require('./models/Comment')
+  require('./models/Rating')
 }
 
 export default { init }

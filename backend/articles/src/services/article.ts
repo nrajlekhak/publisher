@@ -24,7 +24,7 @@ export const update = async (article: Article, articleId: string, updatedBy: str
   try {
     // find the article
     const foundArticle: Article | null = await Article.findOne({
-      id: { $eq: articleId },
+      _id: { $eq: articleId },
       deletedAt: { $eq: null },
     })
     if (!foundArticle) {
@@ -45,8 +45,14 @@ export const update = async (article: Article, articleId: string, updatedBy: str
       edited: foundArticle.edited,
     })
 
+    article.edited = foundArticle.edited ? foundArticle.edited + 1 : 1
+
     //update the article
-    const updatedArticle = Article.updateOne({ _id: { $eq: articleId } }, { $set: article }).exec()
+    const updatedArticle = Article.updateOne(
+      { _id: { $eq: articleId } },
+      { $set: article },
+      { new: true }
+    ).exec()
 
     return updatedArticle
   } catch (err) {
@@ -57,9 +63,11 @@ export const update = async (article: Article, articleId: string, updatedBy: str
 
 export const getAll = async (userRole: UserRole) => {
   if (userRole.isAdmin) {
-    return await Article.find({ deletedAt: { $eq: null } })
+    return await Article.find({ deletedAt: { $eq: null } }).sort({ createdAt: -1 })
   }
-  return await Article.find({ deletedAt: { $eq: null }, createdBy: { $eq: userRole.userId } })
+  return await Article.find({ deletedAt: { $eq: null }, createdBy: { $eq: userRole.userId } }).sort(
+    { createdAt: -1 }
+  )
 }
 
 export const getOne = async ({ slug, userRole }: { slug: string; userRole: UserRole }) => {
@@ -74,7 +82,9 @@ export const getOne = async ({ slug, userRole }: { slug: string; userRole: UserR
     if (!article) {
       throw { message: ' article not found' }
     }
-    const articleHistories = await ArticleHistory.find({ articleId: { $eq: article.id } })
+    const articleHistories = await ArticleHistory.find({ articleId: { $eq: article.id } }).sort({
+      createdAt: -1,
+    })
 
     return { article, articleHistories }
   } catch (e) {
@@ -97,4 +107,48 @@ export const destroy = async (
     { _id: { $eq: articleId }, createdBy: { $eq: userRole.userId } },
     { $set: { deletedAt: new Date(), deletedBy: deletedBy, edited: 1 } }
   ).exec()
+}
+
+export const restoreHistory = async (articleId: string, historyId: string) => {
+  try {
+    const history = await ArticleHistory.findOne<ArticleHistory>({ _id: { $eq: historyId } })
+    if (!history) throw { message: 'History not found' }
+
+    const article = await Article.findOne<Article>({ _id: { $eq: articleId } })
+    if (!article) throw { message: 'Article not found' }
+
+    const updatedArticle = await Article.findByIdAndUpdate(
+      { _id: articleId },
+      {
+        $set: {
+          title: history.title,
+          description: history.description,
+          metaDesc: history.metaDesc,
+          keywords: history.keywords,
+          featured_image: history.featured_image,
+          // slug: history.slug,
+          edited: article.edited ? article.edited + 1 : 1,
+        },
+      },
+      { new: true }
+    ).exec()
+
+    // copy it to ArticleHistory
+    await ArticleHistory.create({
+      title: article.title,
+      description: article.description,
+      slug: article.slug,
+      keywords: article.keywords,
+      metaDesc: article.metaDesc,
+      articleId: articleId,
+      updatedBy: article.createdBy,
+      deletedAt: article.deletedAt,
+      createdBy: article.createdBy,
+      edited: article.edited,
+    })
+    return updatedArticle
+  } catch (err) {
+    console.error(err)
+    throw err
+  }
 }

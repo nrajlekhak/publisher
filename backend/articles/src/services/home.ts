@@ -4,7 +4,7 @@ import { Article } from '../@types/Article'
 const Article = mongoose.model('Article')
 
 export const getAll = async () => {
-  return await Article.find({ deletedAt: { $eq: null } })
+  return await Article.find({ deletedAt: { $eq: null } }).sort({ createdAt: -1 })
 }
 
 export const getOne = async ({ slug }: { slug: string }) => {
@@ -23,6 +23,28 @@ export const getOne = async ({ slug }: { slug: string }) => {
           localField: '_id',
           foreignField: 'articleId',
           as: 'comments',
+        },
+      },
+      {
+        $lookup: {
+          from: 'ratings',
+          localField: '_id',
+          foreignField: 'articleId',
+          as: 'ratings',
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          description: 1,
+          slug: 1,
+          keywords: 1,
+          metaKeywords: 1,
+          createdAt: 1,
+          featured_image: 1,
+          comments: 1,
+          averageRating: { $avg: '$ratings.rating' },
         },
       },
     ])

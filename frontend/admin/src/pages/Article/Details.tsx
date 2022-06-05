@@ -23,6 +23,14 @@ export default function Details() {
     }
   };
 
+  const restoreHistory = async (historyId: string, articleId: string) => {
+    const res = await API.post(
+      `/articles/restoreHistory/${articleId}/${historyId}`
+    );
+    console.log(res);
+    return getArticle(res.data.slug);
+  };
+
   useEffect(() => {
     getArticle(slug || '');
   }, [slug]);
@@ -88,7 +96,10 @@ export default function Details() {
               </div>
             </div>
           </div>
-          <ArticleSidebar articleHistory={articleHistory} />
+          <ArticleSidebar
+            articleHistory={articleHistory}
+            restoreHistory={restoreHistory}
+          />
         </div>
       </div>
     </>
