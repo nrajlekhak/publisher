@@ -27,7 +27,6 @@ export default function Details() {
     const res = await API.post(
       `/articles/restoreHistory/${articleId}/${historyId}`
     );
-    console.log(res);
     return getArticle(res.data.slug);
   };
 
@@ -73,7 +72,7 @@ export default function Details() {
                 <p className='text-gray-800 dark:text-white text-sm lg:text-base font-medium leading-none'>
                   Edited:{' '}
                   <span className='font-semibold md:font-bold'>
-                    {article.edited} times
+                    {article.edited} Times
                   </span>
                 </p>
               </div>

@@ -11,7 +11,6 @@ export default function ArticleDetails() {
 
   const article = useSelector((state: any) => state.reducer.publisher.article);
 
-
   const { slug } = useParams();
 
   const renderStars = (n: number) => {
@@ -114,10 +113,7 @@ export default function ArticleDetails() {
               comments={article.comments || []}
             />
           </div>
-          <div className='lg:w-1/4'>
-            <div className='flex justify-center items-center  my-10 md:mt-0 pb-5'>
-              <h2 className=''>Popular Articles</h2>
-            </div>
+          <div className='lg:w-1/3'>
             <PopularArticles />
           </div>
         </div>

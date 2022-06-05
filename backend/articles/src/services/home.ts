@@ -44,6 +44,7 @@ export const getOne = async ({ slug }: { slug: string }) => {
           createdAt: 1,
           featured_image: 1,
           comments: 1,
+          edited: 1,
           averageRating: { $avg: '$ratings.rating' },
         },
       },
@@ -56,4 +57,33 @@ export const getOne = async ({ slug }: { slug: string }) => {
     console.error(e)
     throw e
   }
+}
+
+export const getPopular = async () => {
+  const article = await Article.aggregate([
+    {
+      $lookup: {
+        from: 'ratings',
+        localField: '_id',
+        foreignField: 'articleId',
+        as: 'ratings',
+      },
+    },
+    {
+      $project: {
+        _id: 1,
+        title: 1,
+        description: 1,
+        slug: 1,
+        keywords: 1,
+        metaKeywords: 1,
+        createdAt: 1,
+        featured_image: 1,
+        averageRating: { $avg: '$ratings.rating' },
+      },
+    },
+    { $sort: { averageRating: -1 } },
+    { $limit: 5 },
+  ])
+  return article
 }

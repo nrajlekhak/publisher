@@ -37,8 +37,10 @@ const Table = ({ title, data, listItems }: TableProps) => {
     <div className='w-full'>
       <div className='mx-auto container bg-white dark:bg-gray-800 shadow rounded'>
         <div className='flex flex-col lg:flex-row p-4 lg:p-8 justify-end lg:items-stretch mr-10 pr-5 '>
-          <div className='flex flex-row items-end '>
-            <div className='flex items-right lg:border-l lg:border-r border-gray-300 dark:border-gray-200 py-3 lg:py-0 lg:px-6'></div>
+          <div className='flex flex-row items-end w-full border-t p-5 '>
+            <div className=' border-gray-300 dark:border-gray-200 py-3 lg:py-0 lg:px-6 w-full text-xl font-bold'>
+              {title}
+            </div>
 
             <div className='lg:ml-6 flex items-center'>
               <div
