@@ -9,6 +9,7 @@ export interface Article {
   publishedOn: string;
   edited: string;
   featured_image?: string;
+  createdAt: string
 }
 
 export interface ArticleHistory extends Article {

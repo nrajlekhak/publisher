@@ -6,7 +6,7 @@ import { Article as ArticleType } from '@@types/Article';
 const Article = ({ article }: { article: ArticleType }) => {
   return (
     <>
-      <div className='my-1 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/2'>
+      <div className='my-4 px-1 w-full md:w-1/2 lg:my-4 lg:px-4 lg:w-1/2'>
         <Link to={`/article/${article.slug}`}>
           <div>
             <div className='relative'>

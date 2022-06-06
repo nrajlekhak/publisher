@@ -12,4 +12,5 @@ export interface Article {
   edited: string;
   featured_image: string;
   comments?: Comment[];
+  createdAt?: string;
 }

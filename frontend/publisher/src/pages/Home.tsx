@@ -1,7 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import Article from '../components/Article';
-import PageTitle from '../components/PageTitle';
 import * as ActionTypes from '@constants/actionTypes';
 import { Article as ArticleType } from '@@types/Article';
 
@@ -18,7 +17,6 @@ export default function Home() {
   }, []);
   return (
     <>
-      <PageTitle />
       <>
         {articles.map((article, index) => (
           <Article article={article} key={index} />

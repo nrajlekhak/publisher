@@ -23,6 +23,13 @@ export default function Details() {
     }
   };
 
+  const restoreHistory = async (historyId: string, articleId: string) => {
+    const res = await API.post(
+      `/articles/restoreHistory/${articleId}/${historyId}`
+    );
+    return getArticle(res.data.slug);
+  };
+
   useEffect(() => {
     getArticle(slug || '');
   }, [slug]);
@@ -65,7 +72,7 @@ export default function Details() {
                 <p className='text-gray-800 dark:text-white text-sm lg:text-base font-medium leading-none'>
                   Edited:{' '}
                   <span className='font-semibold md:font-bold'>
-                    {article.edited} times
+                    {article.edited} Times
                   </span>
                 </p>
               </div>
@@ -88,7 +95,10 @@ export default function Details() {
               </div>
             </div>
           </div>
-          <ArticleSidebar articleHistory={articleHistory} />
+          <ArticleSidebar
+            articleHistory={articleHistory}
+            restoreHistory={restoreHistory}
+          />
         </div>
       </div>
     </>

@@ -1,6 +1,7 @@
 export interface Rating {
   id?: string
-  rating: string
-  name: string //randomly generated if not provided
+  rating: number
+  email: string //randomly generated if not provided
   ipAddress: string // for tracking spams
+  articleId: string
 }

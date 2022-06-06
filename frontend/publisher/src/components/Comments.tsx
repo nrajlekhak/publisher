@@ -66,6 +66,7 @@ const Comment = ({ comment }: { comment: CommentType }) => {
 const CommentBox = ({ articleId }: { articleId: string }) => {
   const [email, setEmail] = useState('');
   const [comment, setComment] = useState('');
+  const [ratings, setRatings] = useState(0);
 
   const { slug } = useParams();
 
@@ -84,18 +85,22 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
     dispatch({
       type: ActionTypes.Comment.CREATE_COMMENT,
       payload: {
-        comment: { email, comment, articleId },
+        comment: { email, comment, articleId, ratings },
         articleSlug: slug,
       },
     });
     setComment('');
+    setRatings(0);
   };
 
   return (
     <form onSubmit={handleSubmit} className='w-full'>
       <div className='w-full flex flex-col p-8 bg-gray-50'>
         <label className='text-base font-semibold leading-none text-gray-800'>
-          Write a Comment
+          <div className='flex justify-between'>
+            <h3>Write a Comment</h3>
+            <Ratings ratings={ratings} setRatings={setRatings} />
+          </div>
         </label>
         <input
           type='email'
@@ -130,9 +135,54 @@ const CommentBox = ({ articleId }: { articleId: string }) => {
   );
 };
 
+const Ratings = ({ ratings, setRatings }: RatingsProps) => {
+  const renderStars = (n: number, setRatings: (rating: number) => void) => {
+    let stars = [];
+    for (let i = 1; i <= n; ++i) {
+      stars.push(
+        <svg
+          className='mx-1 w-4 h-4 fill-current text-yellow-500 cursor-pointer'
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 20 20'
+          onClick={() => setRatings(i)}
+          key={i}
+        >
+          <path d='M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z' />
+        </svg>
+      );
+    }
+    for (let i = n; i < 5; i++) {
+      stars.push(
+        <svg
+          className='mx-1 w-4 h-4 fill-current text-gray-400 cursor-pointer'
+          xmlns='http://www.w3.org/2000/svg'
+          viewBox='0 0 20 20'
+          onClick={() => setRatings(i + 1)}
+          key={i + 'ra'}
+        >
+          <path d='M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z' />
+        </svg>
+      );
+    }
+    return stars;
+  };
+  return (
+    <div className='flex justify-center items-center'>
+      <div className='flex items-center mt-2 mb-4'>
+        {renderStars(ratings, setRatings)}
+      </div>
+    </div>
+  );
+};
+
 function formatDate(date: string) {
   const d = new Date(date);
   return d.toDateString() || date;
+}
+
+interface RatingsProps {
+  ratings: number;
+  setRatings: (rating: number) => void;
 }
 
 export default Comments;

@@ -27,5 +27,7 @@ export default function Article() {
     dispatch({ type: ActionTypes.Article.GET_ARTICLE });
   }, []);
 
-  return <Table title='Articles' listItems={listItems} data={articles}></Table>;
+  return (
+    <Table title='All Articles' listItems={listItems} data={articles}></Table>
+  );
 }

@@ -2,9 +2,20 @@ import express, { Request, Response } from 'express'
 
 import validate from '../utils/validate'
 import { articleValidation } from '../validations/article.validation'
-import { create, update, destroy, getAll, getOne } from '../services/article'
+import { create, update, destroy, getAll, getOne, restoreHistory } from '../services/article'
 
 const articleRouter = express.Router()
+
+articleRouter.post('/restoreHistory/:articleId/:historyId', async (req: Request, res: Response) => {
+  try {
+    const { articleId, historyId } = req.params
+    const updateArticle = await restoreHistory(articleId, historyId)
+    return res.status(200).json(updateArticle)
+  } catch (err) {
+    console.error(err)
+    return res.status(404).json(err)
+  }
+})
 
 articleRouter.post('/create', validate(articleValidation), async (req: Request, res: Response) => {
   try {
