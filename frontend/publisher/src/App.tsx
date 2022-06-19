@@ -1,14 +1,24 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { BrowserRouter } from 'react-router-dom';
+import { Provider } from 'react-redux';
 
-import "./index.scss";
+import Navigation from './Navigation';
+import store from 'admin/store';
+
+import Layout from './Layout';
+import './index.scss';
 
 const App = () => (
-  <div className="mt-10 text-3xl mx-auto max-w-6xl">
-    <div>Name: publisher</div>
-    <div>Framework: react</div>
-    <div>Language: TypeScript</div>
-    <div>CSS: Tailwind</div>
-  </div>
+  <Provider store={store}>
+    <Layout>
+      <Navigation />
+    </Layout>
+  </Provider>
 );
-ReactDOM.render(<App />, document.getElementById("app"));
+ReactDOM.render(
+  <BrowserRouter>
+    <App />
+  </BrowserRouter>,
+  document.getElementById('app')
+);
