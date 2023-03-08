@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 
-import Navigation from './Navigation';
 import store from 'admin/store';
+
+import Navigation from './Navigation';
 
 import Layout from './Layout';
 import './index.scss';
